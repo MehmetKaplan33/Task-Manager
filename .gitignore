@@ -1,0 +1,16 @@
+# Node.js (frontend)
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+
+# Java (backend)
+backend/target/
+*.class
+
+# IDE
+.idea/
+.vscode/
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db
