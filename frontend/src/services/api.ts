@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+// Railway backend URL'nizi kullanın
+const API_BASE_URL = 'https://task-manager-production-8021.up.railway.app/api';
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
