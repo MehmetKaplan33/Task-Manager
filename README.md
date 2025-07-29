@@ -166,12 +166,6 @@ Testleri çalıştırmak için:
 mvn test
 ```
 
-## 📚 API Dokümantasyonu
-
-API dokümantasyonuna uygulama çalışırken şu adresten erişebilirsiniz:
-```
-http://localhost:8080/swagger-ui.html
-```
 
 ## 🤝 Katkıda Bulunma
 
