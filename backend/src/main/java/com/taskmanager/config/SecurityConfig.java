@@ -16,10 +16,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable()) // CSRF kapalı, test için kolaylık
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS ayarını kullan
+                .csrf(csrf -> csrf.disable()) // CSRF kapalı (API için gerekmez)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // tüm isteklere izin ver
+                        .anyRequest().permitAll()  // tüm isteklere izin ver (geliştirme için)
                 );
         return http.build();
     }
@@ -27,13 +27,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-        "http://localhost:5173",
-        "https://mk-task-manager.vercel.app",
-        "https://taskmanager.kaplanmehmet.com"
-    ));
+
+        // Frontend domainlerini buraya ekle
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:5173",
+                "https://mk-task-manager.vercel.app",
+                "https://taskmanager.kaplanmehmet.com"
+        ));
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*")); // frontend header'lara erişebilsin
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
