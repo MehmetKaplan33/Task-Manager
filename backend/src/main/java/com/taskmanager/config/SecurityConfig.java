@@ -1,8 +1,7 @@
-package com.example.taskmanager.config;
+package com.taskmanager.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -15,36 +14,30 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors().and()
-            .csrf().disable()
-            .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight izinli
-            .anyRequest().permitAll();
-
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable()) // CSRF kapalı, test için kolaylık
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()  // tüm isteklere izin ver
+                );
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // Buraya sadece izin vermek istediğin domainleri yaz
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:5173",
-            "https://mk-task-manager.vercel.app",
-            "https://taskmanager.kaplanmehmet.com"
-        ));
-
+        configuration.setAllowedOrigins(Arrays.asList(
+        "http://localhost:5173",
+        "https://mk-task-manager.vercel.app",
+        "https://taskmanager.kaplanmehmet.com"
+    ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true); // Cookie / Authorization header gönderimine izin
-        configuration.setMaxAge(3600L); // 1 saat cache
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
 }
